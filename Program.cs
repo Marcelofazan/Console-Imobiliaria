@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
+using System.Globalization;
 
 namespace Imobiliaria
 {
@@ -29,7 +26,7 @@ namespace Imobiliaria
         }
         struct locacao
         {
-            public byte modalidadelocacao;
+            public int modalidadelocacao;
             public double valoraluguel;
             public int numeromeses;
             public double valorentrada;
@@ -82,7 +79,7 @@ namespace Imobiliaria
 
             Console.WriteLine("EMISSAO DE CONTRATO DE LOCAÇÃO");
             Console.WriteLine("Deseja Criar novo CONTRATO DE LOCACAO S-SIM ou N-NÃO");
-            NovoContrato = Console.ReadLine();
+            NovoContrato = Console.ReadLine().ToUpper();
             if (NovoContrato != "S")
             {
                 Console.WriteLine("Cancelada a locação");
@@ -92,15 +89,15 @@ namespace Imobiliaria
                 inquilino inq = new inquilino();
 
                 Console.WriteLine("Escreva o Nome do Inquilino:");
-                inq.nome = Console.ReadLine();
+                inq.nome = Console.ReadLine().ToUpper();
                 Console.WriteLine("Digite o numero do R.G.:");
-                inq.rg = Console.ReadLine();
+                inq.rg = Console.ReadLine().ToUpper();
                 Console.WriteLine("Escreva o CPF:");
-                inq.cpf = Console.ReadLine();
+                inq.cpf = Console.ReadLine().ToUpper();
                 Console.WriteLine("Informe o Numero do DDD do Telefone:");
-                inq.continquilino.ddd = Convert.ToInt16(Console.ReadLine());
+                inq.continquilino.ddd = short.TryParse(Console.ReadLine(), out short ddd) ? ddd : (short)0;
                 Console.WriteLine("Informe o Numero do Telefone:");
-                inq.continquilino.telefone = Console.ReadLine();
+                inq.continquilino.telefone = Console.ReadLine().ToUpper();
                 Console.WriteLine("\n" + "Inquilino Cadastrado com Sucesso *_______________________________________________________________________________*" + "\n" +
                                   "Nome Inquilino: " + inq.nome + " RG: " + inq.rg + " CPF: " + inq.cpf + "\n" +
                                   "Telefone: " + fone(inq.continquilino.ddd, inq.continquilino.telefone) + "\n");
@@ -108,33 +105,33 @@ namespace Imobiliaria
                 imovel imo = new imovel();
 
                 Console.WriteLine("Tipo do Imovel Digite Casa |Apartamento ");
-                imo.tipoimovel = Console.ReadLine();
+                imo.tipoimovel = Console.ReadLine().ToUpper();
                 Console.WriteLine("Escreva a Rua do Imóvel:");
-                imo.imoendereco.rua = Console.ReadLine();
+                imo.imoendereco.rua = Console.ReadLine().ToUpper();
                 Console.WriteLine("Escreva o numero do Imóvel:");
-                imo.imoendereco.numero = Convert.ToInt16(Console.ReadLine());
+                imo.imoendereco.numero = short.TryParse(Console.ReadLine(), out short numero) ? numero : (short)0;
                 Console.WriteLine("Escreva o Bairro:");
-                imo.imoendereco.bairro = Console.ReadLine();
+                imo.imoendereco.bairro = Console.ReadLine().ToUpper();
                 Console.WriteLine("Escreva a Cidade:");
-                imo.imoendereco.cidade = Console.ReadLine();
+                imo.imoendereco.cidade = Console.ReadLine().ToUpper();
                 Console.WriteLine("Escreva o Estado:");
-                imo.imoendereco.estado = Console.ReadLine();
+                imo.imoendereco.estado = Console.ReadLine().ToUpper();
                 Console.WriteLine("Escreva o numero do CEP:");
-                imo.imoendereco.cep = Console.ReadLine();
+                imo.imoendereco.cep = Console.ReadLine().ToUpper();
                 Console.WriteLine("Escreva a area do Terreno em m2:");
-                imo.terreno = Convert.ToInt16(Console.ReadLine());
+                imo.terreno = short.TryParse(Console.ReadLine(), out short terreno) ? terreno : (short)0;
                 Console.WriteLine("Escreva a area construida em m2:");
-                imo.areaconstruida = Convert.ToInt16(Console.ReadLine());
+                imo.areaconstruida = short.TryParse(Console.ReadLine(), out short areaconstruida) ? areaconstruida : (short)0;
                 Console.WriteLine("Escreva qual o numero de quartos:");
-                imo.numeroquartos = Convert.ToInt16(Console.ReadLine());
+                imo.numeroquartos = short.TryParse(Console.ReadLine(), out short numeroquartos) ? numeroquartos : (short)0;
                 Console.WriteLine("Escreva qual o numero de banheiros:");
-                imo.numerobanheiro = Convert.ToInt16(Console.ReadLine());
+                imo.numerobanheiro = short.TryParse(Console.ReadLine(), out short numerobanheiro) ? numerobanheiro : (short)0;
                 Console.WriteLine("Escreva o numero de vagas na garagem:");
-                imo.garagem = Convert.ToInt16(Console.ReadLine());
+                imo.garagem = short.TryParse(Console.ReadLine(), out short garagem) ? garagem : (short)0;
                 if (imo.tipoimovel == "Apartamento" || imo.tipoimovel == "apartamento")
                 {
                     Console.WriteLine("Escreva o numero do Apto:");
-                    imo.imoendereco.apto = Convert.ToInt16(Console.ReadLine());
+                    imo.imoendereco.apto = short.TryParse(Console.ReadLine(), out short apto) ? apto : (short)0;
                 }
                 Console.WriteLine("\n" + "Imovel Cadastrado com Sucesso *_______________________________________________________________________________*" + "\n" +
                                   "Tipo do Imovel: " + imo.tipoimovel + " Terreno em m2: " + imo.terreno + " Area construida em m2: " + imo.areaconstruida + "\n" +
@@ -143,7 +140,7 @@ namespace Imobiliaria
 
                 Console.WriteLine("Digite o numero de proprietários no máximo 3 :");
 
-                qt = Convert.ToInt16(Console.ReadLine());
+                qt = int.TryParse(Console.ReadLine(), out int resultado) ? resultado : 1;
                 proprietario[] pro = new proprietario[qt];
                 if (qt > 3)
                 {
@@ -154,15 +151,15 @@ namespace Imobiliaria
                     for (i = 0; i < qt; i++)
                     {
                         Console.WriteLine("Escreva o Nome do Proprietário:");
-                        pro[i].nome = Console.ReadLine();
+                        pro[i].nome = Console.ReadLine().ToUpper();
                         Console.WriteLine("Digite o numero do R.G.:");
-                        pro[i].rg = Console.ReadLine();
+                        pro[i].rg = Console.ReadLine().ToUpper();
                         Console.WriteLine("Escreva o CPF:");
-                        pro[i].cpf = Console.ReadLine();
+                        pro[i].cpf = Console.ReadLine().ToUpper();
                         Console.WriteLine("Informe o Numero do DDD do Telefone:");
-                        pro[i].contproprietario.ddd = Convert.ToInt16(Console.ReadLine());
+                        pro[i].contproprietario.ddd = short.TryParse(Console.ReadLine(), out short inputDdd) ? inputDdd : (short)0;
                         Console.WriteLine("Informe o Numero do Telefone:");
-                        pro[i].contproprietario.telefone = Console.ReadLine();
+                        pro[i].contproprietario.telefone = Console.ReadLine().ToUpper();
                     }
                     for (i = 0; i < qt; i++)
                     {
@@ -173,21 +170,48 @@ namespace Imobiliaria
                     int nParcela;
 
                     Console.WriteLine("Digite o código da modalidade: 1 - FIADOR | 2 - CAUÇÃO");
-                    loc.modalidadelocacao = Convert.ToByte(Console.ReadLine());
+                    loc.modalidadelocacao = (int.TryParse(Console.ReadLine(), out int valor) && (valor == 1 || valor == 2)) ? valor : 0;
                     Console.WriteLine("Digite o valor do Aluguel:");
-                    loc.valoraluguel = Convert.ToDouble(Console.ReadLine());
+                    string dvaloraluguel = Console.ReadLine();
+                    if (double.TryParse(dvaloraluguel, NumberStyles.Any, CultureInfo.CurrentCulture, out double dvaloraluguelConvertido))
+                    {
+                        loc.valoraluguel = dvaloraluguelConvertido;
+                    }
+                    else
+                    {
+                        loc.valoraluguel = 0;
+                    }
+
                     Console.WriteLine("Numero de meses do contrato:");
-                    loc.numeromeses = Convert.ToInt16(Console.ReadLine());
+                    loc.numeromeses = short.TryParse(Console.ReadLine(), out short numeromeses) ? numeromeses : (short)0;
                     if (loc.modalidadelocacao == 2)
                     {
                         Console.WriteLine("Valor Entrada Caução:");
                         loc.valorentrada = Convert.ToDouble(Console.ReadLine());
                     }
                     Console.WriteLine("Digite o valor do Condominio:");
-                    loc.valorcondominio = Convert.ToDouble(Console.ReadLine());
+                    string dvalorcondominio = Console.ReadLine();
+                    if (double.TryParse(dvalorcondominio, NumberStyles.Any, CultureInfo.CurrentCulture, out double dvalorcondominioConvertido))
+                    {
+                        loc.valorcondominio = dvalorcondominioConvertido;
+                    }
+                    else
+                    {
+                        loc.valorcondominio = 0;
+                    }
+
                     Console.WriteLine("Digite o numero Percentual de Comissão da Imobiliária:");
-                    loc.comissaoimobiliaria = Convert.ToDouble(Console.ReadLine());
-                    Console.WriteLine("\n" + "Parcelas do Contrato *_______________________________________________________________________________*" + "\n");
+                    string dcomissaoimobiliaria = Console.ReadLine();
+                    if (double.TryParse(dcomissaoimobiliaria, NumberStyles.Any, CultureInfo.CurrentCulture, out double dcomissaoimobiliariaConvertido))
+                    {
+                        loc.comissaoimobiliaria = dcomissaoimobiliariaConvertido;
+                    }
+                    else
+                    {
+                        loc.comissaoimobiliaria = 0;
+                    }
+
+                    Console.WriteLine("\n" + "Contrato de Locação *_______________________________________________________________________________*" + "\n");
 
                     string[] vetprop = new string[loc.numeromeses];
                     string[] vetprop1 = new string[loc.numeromeses];
@@ -199,8 +223,8 @@ namespace Imobiliaria
                         nParcela = i + 1;
                         double ntotaluguel;
                         ntotaluguel = loc.valoraluguel + loc.valorcondominio;
-                        Console.WriteLine("Numero Parcela: " + nParcela + " Valor a Pagar R$: " + ntotaluguel);
-                        vetprop[i] = "Parcela a Receber : " + nParcela + " Valor do Repasse R$: " + calcularepasse(loc.valoraluguel, loc.valorcondominio, loc.comissaoimobiliaria, qt);
+                        Console.WriteLine("[Parcela]: " + nParcela + " [Aluguel Valor] R$: " + ntotaluguel);
+                        vetprop[i] = "[Parcela] : " + nParcela + " [Repasse Valor] R$: " + calcularepasse(loc.valoraluguel, loc.valorcondominio, loc.comissaoimobiliaria, qt);
                     }
                     if (loc.modalidadelocacao == 3)
                     {
@@ -209,37 +233,34 @@ namespace Imobiliaria
                     Console.WriteLine("\n" + "Repasse Liquido aos Proprietários *_______________________________________________________________________________*" + "\n");
                     if (qt >= 1 )
                     {
-                        Console.WriteLine("\n");
                         for (i = 0; i < loc.numeromeses; i++)
                         {
                             vetprop1[i] = vetprop[i];
-                            Console.WriteLine("Repasse ao proprietário " + pro[0].nome + " R$: " + vetprop1[i]);
+                            Console.WriteLine("[Proprietário] " + pro[0].nome + " [Valor] R$: " + vetprop1[i]);
                         }
                     }
                     if (qt >= 2)
                     {
-                        Console.WriteLine("\n");
                         for (i = 0; i < loc.numeromeses; i++)
                         {
                             vetprop2[i] = vetprop[i];
-                            Console.WriteLine("Repasse ao proprietário " + pro[1].nome + " R$: " + vetprop2[i]);
+                            Console.WriteLine("[Proprietário] " + pro[1].nome + " [Valor] R$: " + vetprop2[i]);
                         }
                     }
                     if (qt == 3)
                     {
-                        Console.WriteLine("\n");
                         for (i = 0; i < loc.numeromeses; i++)
                         {
                             vetprop3[i] = vetprop[i];
-                            Console.WriteLine("Repasse ao proprietário " + pro[2].nome + " R$: " + vetprop3[i]);
+                            Console.WriteLine("[Proprietário]" + pro[2].nome + " R$: " + vetprop3[i]);
                         }
                     }
-                    Console.WriteLine("\n");
+
                     Console.WriteLine("\n" + "Comissão Imobiliaria a Receber *_______________________________________________________________________________*" + "\n");
                     for (i = 0; i < loc.numeromeses; i++)
                     {
                         nParcela = i + 1;
-                        Console.WriteLine("Comissão Imobiliaria - Numero Parcela: " + nParcela + " Valor R$: " + (loc.valoraluguel + loc.valorcondominio) / loc.comissaoimobiliaria);
+                        Console.WriteLine("[Comissão Parcela]: " + nParcela + " [Valor] R$: " + (loc.valoraluguel + loc.valorcondominio) * loc.comissaoimobiliaria / 100);
                     }
                 }
             }
