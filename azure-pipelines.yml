@@ -1,0 +1,57 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  # Aponta para o nome correto do seu projeto Windows Forms
+  projectPath: '**/SimplesCRUD.csproj'
+  buildPlatform: 'x86'          
+  buildConfiguration: 'Release'
+
+steps:
+# 1. Garante a instalação do NuGet no ambiente do agente Windows
+- task: NuGetToolInstaller@1
+  displayName: 'Garantir Instalador do NuGet'
+
+# 2. Executa a restauração dos pacotes (como drivers de banco de dados) na pasta de pacotes
+- powershell: |
+    $csproj = Get-Item "$(projectPath)"
+    $projectDir = $csproj.Directory.FullName
+    $solutionDir = $csproj.Directory.Parent.FullName
+    
+    Write-Host "Diretório do projeto: $projectDir"
+    Write-Host "Diretório da Solução (Raiz): $solutionDir"
+    
+    nuget restore "$($csproj.FullName)" -PackagesDirectory "$solutionDir\packages"
+  displayName: 'Restaurar Pacotes NuGet via PowerShell'
+
+# 3. Compila o projeto Windows Forms jogando o executável e as DLLs direto na pasta de staging do Azure
+- task: VSBuild@1
+  displayName: 'Compilar Aplicativo Windows Forms (x86)'
+  inputs:
+    solution: '$(projectPath)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    # Removeu argumentos Web. Agora direciona o .exe e as DLLs compiladas para a pasta de saída do Azure
+    msbuildArgs: '/p:OutputPath="$(build.artifactStagingDirectory)\WindowsFormsPronto" /p:BaseOutputPath="$(build.artifactStagingDirectory)\WindowsFormsPronto"'
+    clean: true
+
+# 4. Compacta a pasta gerada em um único arquivo chamado drop.zip
+- task: ArchiveFiles@2
+  displayName: 'Compactar Arquivos em drop.zip'
+  inputs:
+    rootFolderOrFile: '$(build.artifactStagingDirectory)\WindowsFormsPronto'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(build.artifactStagingDirectory)\drop.zip'
+    replaceExistingArchive: true
+
+# 5. Publica o arquivo drop.zip final na interface do Azure DevOps para download
+- task: PublishBuildArtifacts@1
+  displayName: 'Publicar Artefato Gerado (drop.zip)'
+  inputs:
+    PathtoPublish: '$(build.artifactStagingDirectory)\drop.zip'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
